@@ -1,0 +1,31 @@
+## Given an array of integers, find all consecutive sequences while keeping the order of the integers in the original array.
+## example one:
+## input = [3,1,2]
+## expected output = [[3,1,2]]
+## example two:
+## input = [7,3,10,5,2,6,9,1]
+## expected output = [[3, 2, 1], [7, 5, 6], [10, 9]]
+
+from Queue import PriorityQueue
+def consecutive_sequences(arr):
+    output = []
+    masterQ = PriorityQueue()
+    for i,v in enumerate(arr):
+        masterQ.put((v,i))
+    while not masterQ.empty():
+        sequenceQ = PriorityQueue()
+        v,i = masterQ.get()
+        sequenceQ.put((i,v))
+        while not masterQ.empty():
+            value, index = masterQ.get()
+            if abs(value-v) > 1:
+                masterQ.put((value,index))
+                break
+            v = value
+            sequenceQ.put((index,value))
+        seq = []
+        while not sequenceQ.empty():
+            index, value = sequenceQ.get()
+            seq.append(value)
+        output.append(seq)
+    return output
